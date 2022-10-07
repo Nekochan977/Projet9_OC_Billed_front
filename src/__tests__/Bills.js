@@ -55,7 +55,7 @@ describe("Given that I'm connected as an employee and on the bills page", ()=>{
         type: 'Employee'
       }))
       const bills = new Bills({ document, onNavigate, localStorage })
-      const handleClick = jest.fn(bills.handleClick)
+      const handleClick = jest.fn(bills.handleClickNewBill)
       document.body.innerHTML = BillsUI({ bills })
 
       const buttonNewBill = screen.getByTestId('btn-new-bill')
