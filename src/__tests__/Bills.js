@@ -8,9 +8,7 @@ import BillsUI from "../views/BillsUI.js"
 import { bills } from "../fixtures/bills.js"
 import { ROUTES, ROUTES_PATH} from "../constants/routes.js"
 import {localStorageMock} from "../__mocks__/localStorage.js"
-
 import Bills from "../containers/Bills.js"
-
 import router from "../app/Router.js";
 
 describe("Given I am connected as an employee", () => {
@@ -55,7 +53,7 @@ describe("Given that I'm connected as an employee and on the bills page", ()=>{
         type: 'Employee'
       }))
       const bills = new Bills({ document, onNavigate, localStorage })
-      const handleClick = jest.fn(bills.handleClickNewBill)
+      const handleClick = jest.fn(()=>bills.handleClickNewBill)
       document.body.innerHTML = BillsUI({ bills })
 
       const buttonNewBill = screen.getByTestId('btn-new-bill')
@@ -63,6 +61,31 @@ describe("Given that I'm connected as an employee and on the bills page", ()=>{
       userEvent.click(buttonNewBill)
       expect(handleClick).toHaveBeenCalled()
       expect(screen.findAllByTitle("Envoyer une note de frais")).toBeTruthy()
+    })
+  })
+})
+
+// test icon-eye
+
+describe("Given that I'm connected as an employee and on the bills page", ()=>{
+  describe("When I click on the eye icon", ()=>{
+    test("Then the modalFile should open", ()=>{
+
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Employee'
+      }))
+      const billsContainer = new Bills({ document, onNavigate, localStorage })
+      window.onNavigate(ROUTES_PATH.Bills)
+      
+      document.body.innerHTML = BillsUI({ data: bills})
+      const handleClick = jest.fn(()=>billsContainer.handleClickIconEye);
+      const iconEye = screen.getAllByTestId('icon-eye');
+      iconEye.forEach(icon=>{
+        icon.addEventListener('click', handleClick)
+        userEvent.click(icon)
+      })
+      expect(handleClick).toHaveBeenCalledTimes(iconEye.length);   
     })
   })
 })
