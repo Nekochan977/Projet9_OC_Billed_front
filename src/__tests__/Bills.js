@@ -77,8 +77,8 @@ describe("Given that I'm connected as an employee and on the bills page", ()=>{
       window.localStorage.setItem('user', JSON.stringify({
         type: 'Employee'
       }))
-      const billsContainer = new Bills({ document, onNavigate, localStorage: window.localStorage })
       window.onNavigate(ROUTES_PATH.Bills)
+      const billsContainer = new Bills({ document, onNavigate, localStorage })
       
       document.body.innerHTML = BillsUI({ data: bills})
       const handleClick = jest.fn(()=>billsContainer.handleClickIconEye);
@@ -96,5 +96,80 @@ describe("Given that I'm connected as an employee and on the bills page", ()=>{
 
       
     })
+  })
+})
+
+//test Get bills
+
+describe("GET Bills Test", () => {
+  test("result undefined when no store found", () => {
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+    window.localStorage.setItem('user', JSON.stringify({
+      type: 'Employee'
+    }));
+    window.onNavigate(ROUTES_PATH.Bills)
+    const billsContainer = new Bills({ document, onNavigate, localStorage });
+
+    const result = billsContainer.getBills();
+
+    expect(result).toBe(undefined);
+  });
+
+  // test("bills length & first id", async () =>{
+  //   Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+  //   window.localStorage.setItem('user', JSON.stringify({
+  //     type: 'Employee'
+  //   }));
+  //   window.onNavigate(ROUTES_PATH.Bills)
+  //   const store = bills;
+  //   console.log(store);
+    
+  //   const billsContainer = new Bills({ document, onNavigate, localStorage, store});
+  //   document.body.innerHTML = BillsUI({ data: bills})
+   
+    
+  //   //console.log(billsContainer);
+
+  //   const result = await billsContainer.getBills;
+  //   expect(result).toBe(4);
+   
+  // })
+
+  test("with wrong date format", async () => {
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+    window.localStorage.setItem('user', JSON.stringify({
+      type: 'Employee'
+    }));
+
+    const billsContainer = new Bills({ document, onNavigate, localStorage, store: {
+      bills: () => (
+        {
+          list: () => (
+            Promise.resolve([
+              {
+                "id": "47qAXb6fIm2zOKkLzMro",
+                "vat": "80",
+                "fileUrl": "https://test.storage.tld/v0/b/billable-677b6.a…f-1.jpg?alt=media&token=c1640e12-a24b-4b11-ae52-529112e9602a",
+                "status": "pending",
+                "type": "Hôtel et logement",
+                "commentary": "séminaire billed",
+                "name": "encore",
+                "fileName": "preview-facture-free-201801-pdf-1.jpg",
+                "date": "Nadja",
+                "amount": 400,
+                "commentAdmin": "ok",
+                "email": "a@a",
+                "pct": 20
+              }
+            ])
+          )
+        }
+      )
+    }
+  });
+
+  const result = await billsContainer.getBills();
+  expect(result[0].date).toBe("Nadja");
+  
   })
 })
