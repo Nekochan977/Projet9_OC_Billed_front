@@ -61,6 +61,8 @@ describe("Given that I'm connected as an employee and on the bills page", ()=>{
       userEvent.click(buttonNewBill)
       expect(handleClick).toHaveBeenCalled()
       expect(screen.findAllByTitle("Envoyer une note de frais")).toBeTruthy()
+
+      
     })
   })
 })
@@ -75,17 +77,24 @@ describe("Given that I'm connected as an employee and on the bills page", ()=>{
       window.localStorage.setItem('user', JSON.stringify({
         type: 'Employee'
       }))
-      const billsContainer = new Bills({ document, onNavigate, localStorage })
+      const billsContainer = new Bills({ document, onNavigate, localStorage: window.localStorage })
       window.onNavigate(ROUTES_PATH.Bills)
       
       document.body.innerHTML = BillsUI({ data: bills})
       const handleClick = jest.fn(()=>billsContainer.handleClickIconEye);
       const iconEye = screen.getAllByTestId('icon-eye');
       iconEye.forEach(icon=>{
+        // const billUrl= icon.getAttribute("data-bill-url")
         icon.addEventListener('click', handleClick)
-        userEvent.click(icon)
+        userEvent.click(icon);
+       
       })
-      expect(handleClick).toHaveBeenCalledTimes(iconEye.length);   
+      $.fn.modal = jest.fn();
+      expect(handleClick).toHaveBeenCalledTimes(iconEye.length); 
+      const modale = document.getElementById('modaleFile');
+      expect(modale).toBeTruthy();
+
+      
     })
   })
 })
