@@ -3,16 +3,12 @@
  */
 
  import { fireEvent, screen, waitFor } from "@testing-library/dom";
-import userEvent from '@testing-library/user-event'
 import NewBillUI from "../views/NewBillUI.js"
 import NewBill from "../containers/NewBill.js"
 import { ROUTES, ROUTES_PATH} from "../constants/routes.js"
 import {localStorageMock} from "../__mocks__/localStorage.js"
 import router from "../app/Router.js"
-// import mockedStore très important apparemment - penser à demander à Antoine...
 import mockedStore from "../__mocks__/store"
-import { async } from "regenerator-runtime";
-import BillsUI from "../views/BillsUI.js";
 
 
 describe("Given I am connected as an employee", () => {
@@ -161,11 +157,9 @@ describe("Given I am connected as an employee", () => {
       });
 
       const handleSubmit = jest.fn(newBill.handleSubmit);
-      newBill.newBill = jest.fn().mockResolvedValue({});
 
       form.addEventListener("submit", handleSubmit);
       fireEvent.submit(form);
-      expect(handleSubmit).toHaveBeenCalled();
       expect(handleSubmit).toHaveBeenCalled();
       expect(screen.getAllByText("Mes notes de frais")).toBeTruthy();
         

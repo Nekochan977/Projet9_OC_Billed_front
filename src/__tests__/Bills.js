@@ -115,26 +115,6 @@ describe("GET Bills Test", () => {
     expect(result).toBe(undefined);
   });
 
-  // test("bills length & first id", async () =>{
-  //   Object.defineProperty(window, 'localStorage', { value: localStorageMock });
-  //   window.localStorage.setItem('user', JSON.stringify({
-  //     type: 'Employee'
-  //   }));
-  //   window.onNavigate(ROUTES_PATH.Bills)
-  //   const store = bills;
-  //   console.log(store);
-    
-  //   const billsContainer = new Bills({ document, onNavigate, localStorage, store});
-  //   document.body.innerHTML = BillsUI({ data: bills})
-   
-    
-  //   //console.log(billsContainer);
-
-  //   const result = await billsContainer.getBills;
-  //   expect(result).toBe(4);
-   
-  // })
-
   test("with wrong date format", async () => {
     Object.defineProperty(window, 'localStorage', { value: localStorageMock });
     window.localStorage.setItem('user', JSON.stringify({
